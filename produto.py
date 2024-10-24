@@ -8,6 +8,9 @@ def gerar_id_produto()->int:
     serial_produto += 1
     return serial_produto
 
+def atualizar_produtos():
+    return dados['produtos']
+
 def ler_produto()->tuple:
     desc = input('Descrição do produto: ')  
     valor = float(input('Valor unitário: ')) 
@@ -21,6 +24,7 @@ def listar_produtos():
         for produto in dados['produtos']:
             print(f"ID: {produto['id']}, Descrição: {produto['descricao']}, Valor: {produto['valor']:.2f}")
     print('--------')
+
 
 def cadastrar_produto(descricao:str, valor:float):
     # global dados 

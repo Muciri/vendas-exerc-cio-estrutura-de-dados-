@@ -19,7 +19,16 @@ def cadastrar_pedido(carrinho:list, valor:float):
         'valor': valor}
     )
 
+def pesquisar_pedido(id:int)->dict:
+    global dados
+    for pedido in dados['pedidos']:
+        if pedido['id'] == id:
+            return pedido
+    return None
+
 def fazer_pedido():
+    dados['produtos'] = atualizar_produtos()
+
     carrinho=[]
     total_compras=0
 
@@ -44,11 +53,11 @@ def fazer_pedido():
                     total_compras += (produto['valor']*quant)
 
                     carrinho.append({
-                        'nome': produto['nome'],
+                        'descricao': produto['descricao'],
                         'valor': produto['valor'],
                         'quantidade': quant
                         })
-                    print(f"{quant} x {produto['nome']} adicionado ao carrinho.")
+                    print(f"{quant} x {produto['descricao']} adicionado ao carrinho.")
                     print('--------')
         
     cadastrar_pedido(carrinho, total_compras)
