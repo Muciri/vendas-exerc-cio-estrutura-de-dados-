@@ -20,6 +20,12 @@ class pedido:
         self.id = id
         self.carrinho = carrinho
         self.valor = valor
+
+    def __str__(self):
+        return f'''
+        id: {self.id} 
+        carrinho: {self.carrinho}
+        valor: {self.valor}'''
     
     def fechar_pedido(self, colecao_pedidos:dict,)->int:
         id_pedido = gerar_id_pedido()
