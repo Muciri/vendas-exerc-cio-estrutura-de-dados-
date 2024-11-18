@@ -1,64 +1,43 @@
-from produto import *
+from save import abrir_json, salvar_produtos
+# from class_produto import GerenciarProduto 
 
-serial_pedido = 0 # variável global que vai controlar o ID dos pedidos
+# estrutura de dados para armazenar todos pedidos
+colecao_pedidos = {} #chave=ID;valor=list(carrinho)
+# variável controladora do serial do pedido
+serial_num_pedido = 0
 
-dados = {"produtos": [],
-         "pedidos": []}
+# carregando dados
+dados = abrir_json()
+# gerenciador = GerenciarProduto(dados) 
+salvar_produtos(dados)
 
-def gerar_id_pedido()->int:
-    global serial_pedido
-    serial_pedido += 1
-    return serial_pedido
+def gerar_id_pedido() -> int:
+    global serial_num_pedido
+    serial_num_pedido += 1
+    return serial_num_pedido
 
+def fechar_pedido(colecao_pedidos:dict, carrinho:list)->int:
+    id_pedido = gerar_id_pedido()
+    colecao_pedidos[id_pedido] = carrinho
+    
+    return id_pedido
 
-def cadastrar_pedido(carrinho:list, valor:float):
-    global dados
-    dados['pedidos'].append({
-        'id': gerar_id_pedido(),
-        'items': carrinho,
-        'valor': valor}
-    )
+def add_produto_carrinho(carrinho:list, idProduto:int,quant:int):
+    carrinho.append([idProduto,quant])
 
-def pesquisar_pedido(id:int)->dict:
-    global dados
-    for pedido in dados['pedidos']:
-        if pedido['id'] == id:
-            return pedido
-    return None
+def exibir_pedido(carrinho:list):
+    print('======================================================')
+    print("                 Itens do pedido:")
+    print('======================================================')
+    print('idProduto  | Descrição      | Preço Unit. | Quantidade')
+    print('-----------  ---------------  ------------  ----------')
+          
+    total = 0
+    for item in carrinho:
+        produto = gerenciador.pesquisar_produto(item[0])        
+        print(f"   {produto['id']:03d}       {produto['descricao']:15s}    {produto['valor']:10.2f}      {item[1]:3d}")
+        total += produto['valor'] * item[1]
 
-def fazer_pedido():
-    dados['produtos'] = atualizar_produtos()
-
-    carrinho=[]
-    total_compras=0
-
-    while True:
-        listar_produtos()
-        pedido=input('Digite o Id para escolher um pedido ou digite 0(numero zero)para finalizar compra.')
-        print('--------')
-        
-        if pedido=='0':
-            print('Os produtos que voce comprou:')
-            for prod in carrinho:
-                print(f'{prod["descricao"]},R${prod["valor"]:.2f}')
-            print(f'Valor total das suas comprinhas:{total_compras:.2f}')
-            print('--------')
-            break
-        else:
-            for produto in dados['produtos']:
-                if produto['id']==int(pedido):
-                    quant = int(input('Digite quantos produtos desse ID você deseja: '))
-                    print('--------')
-                    carrinho.append(produto)
-                    total_compras += (produto['valor']*quant)
-
-                    carrinho.append({
-                        'descricao': produto['descricao'],
-                        'valor': produto['valor'],
-                        'quantidade': quant
-                        })
-                    print(f"{quant} x {produto['descricao']} adicionado ao carrinho.")
-                    print('--------')
-        
-    cadastrar_pedido(carrinho, total_compras)
-
+    print('======================================================')
+    print(f"Valor total das suas comprinhas:{total:.2f}")
+    print('======================================================')
