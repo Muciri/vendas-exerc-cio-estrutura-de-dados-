@@ -1,10 +1,8 @@
 from pprint import pprint
-# from class_produto import Produto, GerenciarProduto 
+from class_produto import Produto, GerenciarProduto
 from pedido import *
 from save import abrir_json, salvar_produtos
-from product import Produto
-from gerenciador_produtos import *
-from pedido_OO import *
+
 
 dados = abrir_json()
 gerenciador = GerenciarProduto(dados)
@@ -31,14 +29,17 @@ Opcao: """)
     )
     print("--------")
     if opcao == 1:
-        id = int(input('qual o id?'))
-        descricao = input('qual a descricao?')
-        valor = float(input('qual o valor?'))
-        novo_produto = produto(id, descricao, valor)
-        GerenciadorProdutos.adicionar_produto(novo_produto)
+
+        descricao, valor = Produto.ler_produto()
+
+        gerenciador.cadastrar_produto(descricao, valor)
+        salvar_produtos(dados)
+        print("Produto cadastrado!")
+        print("--------")
+
 
     elif opcao == 2:
-        GerenciadorProdutos.listar_produtos()
+        gerenciador.listar_produtos()
 
 
     elif opcao == 3: # fazer o pedido
@@ -79,12 +80,22 @@ Opcao: """)
                 print(f'Produto id={idProduto} adicionado')
                         
     elif opcao == 4:
-        pesquisa = int(input('qual o id do produto?'))
-        GerenciadorProdutos.pesquisar(pesquisa)
+        id = int(input("Digite o id do produto"))
+        retorno = gerenciador.pesquisar_produto(id)
+        if retorno:
+            print(
+                f"Produto encontrado: {retorno['descricao']}, valor: {retorno['valor']:.2f}"
+            )
+
+        else:
+            print("Produto não encontrado.")
 
     elif opcao == 5: ## exibir pedido
-        pedido.exibir_pedido(carrinho)
-
+        id_pedido = int(input("Digite o id do pedido: "))
+        if id_pedido in colecao_pedidos:
+            exibir_pedido(colecao_pedidos[id_pedido])
+        else:
+            print(f"Pedido de numero {id_pedido} não encontrado.")
     elif opcao == 6:
         print("Fim do programa.")
         print("--------")

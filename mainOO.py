@@ -1,16 +1,26 @@
 from product import Produto
 from gerenciador_produtos import GerenciadorProdutos
 
-p1 = Produto(1,"Cadeira", 100.0)
-p2 = Produto(2,"Mesa", 200.0)
-p3 = Produto(3,"Cama", 300.0)
+p1 = Produto("Cadeira", 100.0)
+p2 = Produto("Mesa", 200.0)
+p3 = Produto("Cama", 300.0)
+
+print(p1.id)
+print(p2.id)
+print(p3.id)
+print("valor de p1:", p1.valor) # aqui chamamos o método get de valor
+
+p1.valor = -150
+print("valor de p1:", p1.valor) # aqui chamamos o método get de valor
 
 gprod = GerenciadorProdutos()
 gprod.adicionar_produto(p1)
 gprod.adicionar_produto(p2)
 gprod.adicionar_produto(p3)
-gprod.adicionar_produto(Produto(4,"Sofá", 400.0))
-gprod.adicionar_produto(Produto(1,"Almofada", 30.0))
+gprod.adicionar_produto(Produto("Sofá", 400.0))
+gprod.adicionar_produto(Produto("Almofada", 30.0))
+
+
 
 print(gprod)
 exit()
